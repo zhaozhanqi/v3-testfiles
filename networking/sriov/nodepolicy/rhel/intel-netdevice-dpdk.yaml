@@ -1,0 +1,19 @@
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: intel-dpdk-rhel
+  namespace: openshift-sriov-network-operator
+spec:
+  deviceType: vfio-pci
+  mtu: 1500
+  nicSelector:
+    pfNames:
+      - p1p2
+    rootDevices:
+      - '0000:3b:00.1'
+    vendor: '8086'
+  nodeSelector:
+    feature.node.kubernetes.io/sriov-capable-rhel: 'true'
+  numVfs: 5
+  priority: 99
+  resourceName: inteldpdkrhel

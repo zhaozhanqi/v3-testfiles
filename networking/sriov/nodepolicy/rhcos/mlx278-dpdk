@@ -1,0 +1,18 @@
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: mlx278-dpdk
+  namespace: openshift-sriov-network-operator
+spec:
+  deviceType: vfio-pci
+  mtu: 1550
+  nicSelector:
+    pfNames:
+      - ens3f1
+    rootDevices:
+      - '0000:5e:00.1'
+    vendor: '15b3'
+  nodeSelector:
+    feature.node.kubernetes.io/sriov-capable: 'true'
+  numVfs: 2
+  resourceName: mlx278dpdk

@@ -1,0 +1,17 @@
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: mlx278-netdevice-rhel
+  namespace: openshift-sriov-network-operator
+spec:
+  mtu: 1500
+  nicSelector:
+    pfNames:
+      - p3p1
+    rootDevices:
+      - '0000:5e:00.0'
+    vendor: '15b3'
+  nodeSelector:
+    feature.node.kubernetes.io/sriov-capable-rhel: 'true'
+  numVfs: 2
+  resourceName: mlx278netdevicerhel

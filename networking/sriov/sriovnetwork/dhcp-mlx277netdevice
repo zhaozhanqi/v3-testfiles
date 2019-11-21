@@ -1,0 +1,16 @@
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetwork
+metadata:
+  name: dhcp-sriovnetwork
+  namespace: openshift-sriov-network-operator
+spec:
+  ipam: |
+    {
+      "type": "dhcp"
+    }
+  vlan: 0
+  spoofChk: "on"
+  trust: "off"
+  resourceName: mlx277netdevice
+  networkNamespace: z2
+
