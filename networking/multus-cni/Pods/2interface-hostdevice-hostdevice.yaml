@@ -1,9 +1,11 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: two-host-device-pod
+  generateName: two-host-device-pod-
+  labels:
+    name: two-host-device-pod
   annotations:
-    k8s.v1.cni.cncf.io/networks: host-device1, host-device2
+    k8s.v1.cni.cncf.io/networks: host-device-1, host-device-2
 spec:
   containers:
   - name: two-host-device-pod

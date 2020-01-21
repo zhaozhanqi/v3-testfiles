@@ -2,7 +2,6 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: multus-cni-config
-  namespace: kube-system
   labels:
     tier: node
     app: multus
@@ -13,7 +12,11 @@ data:
       "type": "multus",
       "logFile": "/var/log/multus.log",
       "logLevel": "debug",
+      "confDir": "/etc/kubernetes/cni/net.d/",
+      "binDir": "/var/lib/cni/bin/",
+      # 80-openshift.conf should be found under /etc/kubernetes/cni/net.d/
       "clusterNetwork": "openshift-sdn",
-      "defaultNetworks": ["/etc/cni/macvlan"],
-      "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig"
+      # the macvlan.conf should be found under /etc/cni/macvlan
+      "defaultNetworks": ["/etc/cni/macvlan/"],
+      "kubeconfig": "/etc/kubernetes/cni/net.d/multus.d/multus.kubeconfig"
     }
