@@ -1,0 +1,6 @@
+oc get csv -n openshift-sriov-network-operator -o yaml > csv.yaml
+
+#for j in `cat csv.yaml | grep "image-registry.openshift-image-registry.svc:5000" | awk  '{ print $2 }' | awk -F@ '{ print $1 }'`; do sed -i "s#${j}#quay.io/openshift-release-dev/ocp-v4.0-art-dev#g" csv.yaml ; done
+sed -i "s#image-registry.openshift-image-registry.svc:5000/openshift/#registry-proxy.engineering.redhat.com/rh-osbs/openshift-#g" csv.yaml
+
+#oc apply -f csv.yaml
