@@ -1,0 +1,23 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: multus-cni-config
+  labels:
+    tier: node
+    app: multus
+data:
+  cni-conf.json: |
+    {
+      "name": "multus-cni-network",
+      "type": "multus",
+      "logFile": "/var/log/multus.log",
+      "logLevel": "debug",
+      "binDir": "/var/lib/cni/bin/",
+      "multusNamespace": "openshift-multus",
+      "systemNamespaces" ["openshift-multus"].
+      # the CRD of openshift-sdn should be created under multusNamespace
+      "clusterNetwork": "openshift-sdn",
+      # the CRD of macvlan-bridge should be created under multusNamespace
+      "defaultNetworks": ["macvlan-bridge"],
+      "kubeconfig": "/etc/kubernetes/cni/net.d/multus.d/multus.kubeconfig"
+    }

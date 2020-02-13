@@ -1,0 +1,16 @@
+apiVersion: metering.openshift.io/v1alpha1
+kind: Metering
+metadata:
+  name: "operator-metering"
+spec:
+  reporting-operator:
+    spec:
+      route:
+        enabled: true
+      authProxy:
+        enabled: true
+        htpasswdData: |
+          fake_user:{SHA}FiffE7XNizUh0CvY6yyjEzSzrvI=
+        cookieSeed: "8d5c4ce78f05e749edd632673aa7998ae9fa3264866e8a4864b500f04460a9b8"
+        subjectAccessReviewEnabled: true
+        delegateURLsEnabled: true

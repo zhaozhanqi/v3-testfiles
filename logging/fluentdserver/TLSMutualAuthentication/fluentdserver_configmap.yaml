@@ -1,0 +1,21 @@
+apiVersion: v1
+data:
+  fluent.conf: |
+    <source>
+       @type forward
+       <transport tls>
+         version TLSv1_2
+         ciphers ALL:!aNULL:!eNULL:!SSLv2
+         insecure false
+        # For Cert signed by public CA
+         ca_path /run/secrets/kubernetes.io/serviceaccount
+         cert_path /fluentd/keys/fluentd.crt
+         private_key_path /fluentd/keys/fluentd.key
+         private_key_passphrase "passphrase"
+         client_cert_auth false
+       </transport>
+     </source>
+kind: ConfigMap
+metadata:
+  name: fluentdserver4
+  namespace: openshift-logging

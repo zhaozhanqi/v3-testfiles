@@ -1,0 +1,10 @@
+apiVersion: metering.openshift.io/v1alpha1
+kind: Report
+metadata:
+  name: namespace-cpu-usage-hourly
+spec:
+  reportingStart: "2020-01-01T00:00:00Z"
+  query: "namespace-cpu-usage"
+  schedule:
+    period: "hourly"
+

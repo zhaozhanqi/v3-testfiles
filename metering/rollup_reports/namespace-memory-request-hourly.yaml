@@ -1,0 +1,10 @@
+apiVersion: metering.openshift.io/v1alpha1
+kind: Report
+metadata:
+  name: namespace-memory-request-hourly
+spec:
+  reportingStart: "2020-01-01T00:00:00Z"
+  query: "namespace-memory-request"
+  schedule:
+    period: "hourly"
+
