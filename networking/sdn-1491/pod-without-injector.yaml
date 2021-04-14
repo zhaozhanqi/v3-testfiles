@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sriov-pod-1
+  annotations:
+    k8s.v1.cni.cncf.io/networks: intel-dpdk-rhcos-a
+spec:
+  containers:
+  - name: hello-sdn
+    image: quay.io/openshifttest/hello-sdn@sha256:d5785550cf77b7932b090fcd1a2625472912fb3189d5973f177a5a2c347a1f95
+    imagePullPolicy: IfNotPresent
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - mountPath: /etc/podnetinfo
+      name: podnetinfo
+      readOnly: false
+    - mountPath: /dev/hugepages
+      name: hugepage
+    resources:
+      requests:
+        memory: 1Gi
+        hugepages-1Gi: 2Gi
+        #hugepages-2Mi: 2048Mi
+        #cpu: "4"
+        openshift.io/inteldpdk: '1'
+      limits:
+        memory: 1Gi
+        hugepages-1Gi: 2Gi
+        #hugepages-2Mi: 2048Mi
+        #cpu: "4"
+        openshift.io/inteldpdk: '1'
+  - name: sriov-example
+    image: quay.io/zzhao/app-netutil
+    imagePullPolicy: IfNotPresent
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - mountPath: /etc/podnetinfo
+      name: podnetinfo
+      readOnly: false
+    - mountPath: /dev/hugepages
+      name: hugepage
+    resources:
+      requests:
+        memory: 1Gi
+        hugepages-1Gi: 1Gi
+        #hugepages-2Mi: 2048Mi
+        #cpu: "4"
+      limits:
+        memory: 1Gi
+        hugepages-1Gi: 1Gi
+        #hugepages-2Mi: 2048Mi
+        #cpu: "4"
+  volumes:
+  - name: podnetinfo
+    downwardAPI:
+      items:
+        - path: "labels"
+          fieldRef:
+            fieldPath: metadata.labels
+        - path: "annotations"
+          fieldRef:
+            fieldPath: metadata.annotations
+        # 1G Hugepages
+        - path: "hugepages_request"
+          resourceFieldRef:
+            containerName: hello-sdn
+            resource: requests.hugepages-1Gi
+            divisor: 1Mi
+        - path: "hugepages_limit"
+          resourceFieldRef:
+            containerName: hello-sdn
+            resource: limits.hugepages-1Gi
+            divisor: 1Mi
+        - path: "hugepages_1G_request_sriov-example"
+          resourceFieldRef:
+            containerName: sriov-example
+            resource: requests.hugepages-1Gi
+            divisor: 1Mi
+        - path: "hugepages_1G_limit_sriov-example"
+          resourceFieldRef:
+            containerName: sriov-example
+            resource: limits.hugepages-1Gi
+            divisor: 1Mi
+  - name: hugepage
+    emptyDir:
+      medium: HugePages

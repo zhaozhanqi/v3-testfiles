@@ -1,0 +1,12 @@
+####Check the offload flow 
+
+ovs-appctl dpctl/dump-flows type=offloaded
+
+
+#check the ovs is hw offload is true
+ovs-vsctl -t 5 get Open_vSwitch . other_config
+
+
+# Check the PF is enable the hw-tc-offload
+ethtool -k ens801f0 | grep hw-tc
+hw-tc-offload: on

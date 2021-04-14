@@ -1,0 +1,19 @@
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: intel-netdevice
+  namespace: openshift-sriov-network-operator
+spec:
+  deviceType: netdevice
+  nicSelector:
+    pfNames:
+      - ens4f0#3-4
+    rootDevices:
+      - '0000:af:00.0'
+    vendor: '8086'
+  nodeSelector:
+    feature.node.kubernetes.io/sriov-capable: 'true'
+  priority: 99
+  numVfs: 5
+  mtu: 1400
+  resourceName: intelnetdevice

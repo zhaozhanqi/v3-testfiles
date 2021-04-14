@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sriovtest
+  labels:
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sriovtest
+      version: v1
+  template:
+    metadata:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+              {
+                "name": "intel-dpdk-rhcos-a"
+              }
+               ]'
+      labels:
+        app: sriovtest
+        version: v1
+    spec:
+      containers:
+      - name: sriov-example
+        image: quay.io/zzhao/app-netutil:latest
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /dev/hugepages
+          name: hugepage
+        resources:
+          requests:
+            memory: 1Gi
+            hugepages-1Gi: 2Gi
+            #hugepages-2Mi: 2048Mi
+            #cpu: "4"
+          limits:
+            memory: 1Gi
+            hugepages-1Gi: 2Gi
+      - name: hello-sdn
+        image: quay.io/openshifttest/hello-sdn@sha256:d5785550cf77b7932b090fcd1a2625472912fb3189d5973f177a5a2c347a1f95
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /dev/hugepages
+          name: hugepage
+        resources:
+          requests:
+            memory: 1Gi
+            hugepages-1Gi: 2Gi
+            #hugepages-2Mi: 2048Mi
+            #cpu: "4"
+          limits:
+            memory: 1Gi
+            hugepages-1Gi: 2Gi
+            #hugepages-2Mi: 2048Mi
+            #cpu: "4"
+      volumes:
+      - name: hugepage
+        emptyDir:
+          medium: HugePages
