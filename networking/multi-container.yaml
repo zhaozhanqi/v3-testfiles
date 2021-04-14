@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-multi-con
+  annotations:
+    k8s.v1.cni.cncf.io/networks: intel-dpdk-rhcos-a, intel-dpdk-rhcos-b
+spec:
+  containers:
+  - name: sriov-example
+    image: quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073
+    imagePullPolicy: IfNotPresent
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - mountPath: /dev/hugepages
+      name: hugepage
+    resources:
+      requests:
+        memory: 1Gi
+        hugepages-1Gi: 2Gi
+        #hugepages-2Mi: 2048Mi
+        #cpu: "4"
+      limits:
+        memory: 1Gi
+        hugepages-1Gi: 2Gi
+  - name: hello-sdn
+    image: quay.io/openshifttest/hello-sdn@sha256:d5785550cf77b7932b090fcd1a2625472912fb3189d5973f177a5a2c347a1f95
+    imagePullPolicy: IfNotPresent
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - mountPath: /dev/hugepages
+      name: hugepage
+    resources:
+      requests:
+        memory: 1Gi
+        hugepages-1Gi: 2Gi
+        #hugepages-2Mi: 2048Mi
+        #cpu: "4"
+      limits:
+        memory: 1Gi
+        hugepages-1Gi: 2Gi
+        #hugepages-2Mi: 2048Mi
+        #cpu: "4"
+  volumes:
+  - name: hugepage
+    emptyDir:
+      medium: HugePages
